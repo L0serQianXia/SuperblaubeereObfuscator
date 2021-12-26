@@ -79,19 +79,19 @@ public class Appender extends AppenderBase<ILoggingEvent> {
   private PatternLayout patternLayout;
 
   /**
-   * Code copied from {@link JTextPane#getLineCount()}
+   * Code copied from {@link JTextArea#getLineCount()}
    *
    * @param textArea
    *          start of line count
    * @return count of lines &gt; 0
    */
-  private int getLineCount(final JTextPane textArea) {
+  private int getLineCount(final JTextArea textArea) {
 
     return textArea.getDocument().getDefaultRootElement().getElementCount();
   }
 
   /**
-   * Code copied from {@link JTextPane#getLineEndOffset(int)}
+   * Code copied from {@link JTextArea#getLineEndOffset(int)}
    * @param textArea
    *          offset for TextArea
    * @param line
@@ -103,7 +103,7 @@ public class Appender extends AppenderBase<ILoggingEvent> {
    *           lines contained in the document (as reported by
    *           getLineCount)
    */
-  private int getLineEndOffset(final JTextPane textArea, final int line) throws BadLocationException {
+  private int getLineEndOffset(final JTextArea textArea, final int line) throws BadLocationException {
 
     final int lineCount = getLineCount(textArea);
     if (line < 0) {
@@ -120,7 +120,7 @@ public class Appender extends AppenderBase<ILoggingEvent> {
   }
 
   /**
-   * Code copied from  {@link JTextPane#replaceRange(String, int, int)}<br>
+   * Code copied from  {@link JTextArea#replaceRange(String, int, int)}<br>
    *
    * Replaces text from the indicated start to end position with the
    * new text specified. Does nothing if the model is null. Simply
@@ -137,7 +137,7 @@ public class Appender extends AppenderBase<ILoggingEvent> {
    * @exception IllegalArgumentException
    *              if part of the range is an invalid position in the model
    */
-  private void replaceRange(final JTextPane textPane, final String str, final int start, final int end)
+  private void replaceRange(final JTextArea textPane, final String str, final int start, final int end)
       throws IllegalArgumentException {
 
     if (end < start) {
@@ -167,7 +167,7 @@ public class Appender extends AppenderBase<ILoggingEvent> {
     // Safe way to update JTextPane
     SwingUtilities.invokeLater(() -> {
       // Alias for JTextPane in the application frame
-      final JTextPane textArea = JObf.getGui();
+      final JTextArea textArea = JObf.getGui();
       if (textArea == null) {
         return;
       }

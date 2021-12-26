@@ -10,8 +10,7 @@
 
 package me.superblaubeere27.jobf;
 
-import javax.swing.JTextPane;
-import javax.swing.UIManager;
+import javax.swing.*;
 import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.FileInputStream;
@@ -48,7 +47,7 @@ public class JObf {
     private static GUI gui;
     //#endif
 
-    public static JTextPane getGui() {
+    public static JTextArea getGui() {
         return gui != null ? gui.logArea : null;
     }
 
