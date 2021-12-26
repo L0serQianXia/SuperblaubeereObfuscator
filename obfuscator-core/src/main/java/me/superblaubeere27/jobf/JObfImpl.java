@@ -504,7 +504,7 @@ public class JObfImpl {
 
 
                                     if (script == null || script.isObfuscatorEnabled(cn)) {
-                                        log.info(String.format("[%s] (%s/%s), Processing %s", Thread.currentThread().getName(), processed, classes.size(), entryName));
+                                        //log.info(String.format("[%s] (%s/%s), Processing %s", Thread.currentThread().getName(), processed, classes.size(), entryName));
 
                                         for (IClassTransformer proc : processors) {
                                             try {
@@ -524,7 +524,7 @@ public class JObfImpl {
                                     int mode = computeMode
                                             | (callback.isForceComputeFrames() ? ModifiedClassWriter.COMPUTE_FRAMES : 0);
 
-                                    log.info(String.format("[%s] (%s/%s), Writing (computeMode = %s) %s", Thread.currentThread().getName(), processed, classes.size(), mode, entryName));
+                                    //log.info(String.format("[%s] (%s/%s), Writing (computeMode = %s) %s", Thread.currentThread().getName(), processed, classes.size(), mode, entryName));
 
                                     ModifiedClassWriter writer = new ModifiedClassWriter(
                                             mode

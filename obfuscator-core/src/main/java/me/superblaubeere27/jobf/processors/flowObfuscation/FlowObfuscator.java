@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import static me.superblaubeere27.jobf.processors.flowObfuscation.FakeTryCatchBlocks.fakeTryCatchBlocks;
 import static me.superblaubeere27.jobf.processors.flowObfuscation.LocalVariableMangler.mangleLocalVariables;
 import static me.superblaubeere27.jobf.processors.flowObfuscation.ReturnMangler.mangleReturn;
 import static me.superblaubeere27.jobf.processors.flowObfuscation.SwitchMangler.mangleSwitches;
@@ -44,6 +45,7 @@ public class FlowObfuscator implements IClassTransformer {
     private BooleanValue badPop = new BooleanValue(PROCESSOR_NAME, "Bad POP", DeprecationLevel.GOOD, true);
     private BooleanValue badConcat = new BooleanValue(PROCESSOR_NAME, "Bad Concat", "Breaks string concatenations", DeprecationLevel.GOOD, true);
     private BooleanValue mangleSwitchesEnabled = new BooleanValue(PROCESSOR_NAME, "Mangle Switches", "Replaces switch statements with if-else statements", DeprecationLevel.OK, false);
+    private BooleanValue fakeTryCatchBlocks = new BooleanValue(PROCESSOR_NAME, "Fake Try-Catch Blocks", "!! Needs COMPUTE_FRAMES (See documentation) !!", DeprecationLevel.BAD, false);
     private BooleanValue mangleReturn = new BooleanValue(PROCESSOR_NAME, "Mangle Return", "!! Needs COMPUTE_FRAMES (See documentation) !!", DeprecationLevel.BAD, false);
     private BooleanValue mangleLocals = new BooleanValue(PROCESSOR_NAME, "Mangle Local Variables", "!! Needs COMPUTE_FRAMES (See documentation) !!", DeprecationLevel.BAD, false);
 
@@ -313,7 +315,7 @@ public class FlowObfuscator implements IClassTransformer {
             if (mangleComparisions.getObject())
                 toAdd.addAll(FloatingPointComparisionMangler.mangleComparisions(node, method));
             //JumpReplacer.process(node, method);
-
+            if(fakeTryCatchBlocks.getObject()) fakeTryCatchBlocks(callback, method);
 
             for (AbstractInsnNode abstractInsnNode : method.instructions.toArray()) {
                 if (badPop.getObject() && abstractInsnNode instanceof JumpInsnNode && abstractInsnNode.getOpcode() == Opcodes.GOTO) {

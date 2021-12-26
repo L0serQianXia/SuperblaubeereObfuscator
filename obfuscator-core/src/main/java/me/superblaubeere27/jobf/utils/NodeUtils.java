@@ -14,6 +14,7 @@ import me.superblaubeere27.jobf.JObf;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
+import org.objectweb.asm.commons.CodeSizeEvaluator;
 import org.objectweb.asm.tree.*;
 import org.objectweb.asm.util.Printer;
 import org.objectweb.asm.util.Textifier;
@@ -32,6 +33,7 @@ public class NodeUtils {
     private static final Printer printer = new Textifier();
     private static final TraceMethodVisitor methodPrinter = new TraceMethodVisitor(printer);
     private static HashMap<Type, String> TYPE_TO_WRAPPER = new HashMap<>();
+    private static final int METHOD_MAX_SIZE = 65535;
 
     static {
         TYPE_TO_WRAPPER.put(Type.INT_TYPE, "java/lang/Integer");
@@ -212,6 +214,10 @@ public class NodeUtils {
         return (node.access & Opcodes.ACC_ENUM) == 0 && (node.access & Opcodes.ACC_INTERFACE) == 0;
     }
 
+    public static boolean isInsnValid(AbstractInsnNode insnNode) {
+        return !(insnNode instanceof FrameNode) && !(insnNode instanceof LineNumberNode) && !(insnNode instanceof LabelNode);
+    }
+
     public static AbstractInsnNode methodCall(ClassNode classNode, MethodNode methodNode) {
         int opcode = Opcodes.INVOKEVIRTUAL;
 
@@ -284,6 +290,16 @@ public class NodeUtils {
             default:
                 throw new UnsupportedOperationException();
         }
+    }
+
+    public static int getMethodSize(MethodNode methodNode) {
+        CodeSizeEvaluator cse = new CodeSizeEvaluator(null);
+        methodNode.accept(cse);
+        return cse.getMaxSize();
+    }
+
+    public static int getMethodFreeSize(MethodNode methodNode) {
+        return METHOD_MAX_SIZE - getMethodSize(methodNode);
     }
 
 //    public static int getTypeLoad(Type argumentType) {
